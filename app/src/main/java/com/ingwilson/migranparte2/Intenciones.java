@@ -2,7 +2,9 @@ package com.ingwilson.migranparte2;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,20 +15,32 @@ import android.widget.Toast;
 
 import java.net.URLEncoder;
 
-public class Intenciones  extends AppCompatActivity {
+public class Intenciones extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intenciones);
     }
+
     public void web(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://developer.android.com/guide/components/intents-common?hl=es-419"));
         startActivity(intent);
     }
+
     public void Llamar(View view) {
         Intent intent = new Intent(Intent.ACTION_CALL,
                 Uri.parse("tel:957554103"));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         startActivity(intent);
     }
     public void maps(View view) {
@@ -107,5 +121,9 @@ public class Intenciones  extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    public void permisos(View view) {
+        startActivity(new Intent(this, Permisos.class));
     }
 }
