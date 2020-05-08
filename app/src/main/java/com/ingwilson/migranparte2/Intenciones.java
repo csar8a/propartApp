@@ -1,7 +1,9 @@
 package com.ingwilson.migranparte2;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -29,7 +31,7 @@ public class Intenciones  extends AppCompatActivity {
     }
     public void maps(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("geo:-18.013739816,-70.2510593169"));
+                Uri.parse("geo:-12.0557045,-76.9382836"));
         startActivity(intent);
     }
     public void foto(View view) {
@@ -63,5 +65,47 @@ public class Intenciones  extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void intencion(View view) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setMessage("Seleccione la aplicación");
+        builder.setTitle("Escoja entre Waze o Google Maps");
+        builder.setNeutralButton("Google Map", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Uri gmmIntentUri;
+                gmmIntentUri = Uri.parse("google.navigation:q=" + -12.0557045 + "," + -76.9382836);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null)
+                    startActivity(mapIntent);
+                else
+                    Toast.makeText(Intenciones.this, "Maps no esta instalado", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setNegativeButton("Waze", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Uri gmmIntentUri;
+                gmmIntentUri = Uri.parse("waze://?ll=" + -12.0557045 + "," + -76.9382836 + "&navigate=yes");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.waze");
+                if (mapIntent.resolveActivity(getPackageManager()) != null)
+                    startActivity(mapIntent);
+                else
+                    Toast.makeText(Intenciones.this, "Waze no esta instalado", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setPositiveButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                return;
+            }
+        });
+        builder.show();
     }
 }
